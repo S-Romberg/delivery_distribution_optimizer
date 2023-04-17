@@ -2,7 +2,7 @@ import csv
 from package import Package
 
 class Main:
-    with open('WGUPS Package File.csv', newline='') as csvfile:
+    with open('Packages.csv', newline='') as csvfile:
         reader = csv.reader(csvfile, delimiter=',')
         for row in reader:
             package = Package(*row)
