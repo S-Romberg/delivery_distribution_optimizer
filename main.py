@@ -1,25 +1,27 @@
 import csv
 from package import Package
+from location import Location
 
 class Main:
-    with open('Packages.csv', newline='') as csvfile:
+    locations = []
+    packages = []
+    with open('data/Packages.csv', newline='') as csvfile:
         reader = csv.reader(csvfile, delimiter=',')
-        for row in reader:
-            package = Package(*row)
-    with open('Addresses and Hubs.csv', newline='') as csvfile:
+        for index, row in enumerate(reader):
+            packages.append(Package(*row))
+    with open('data/Addresses and Hubs.csv', newline='') as csvfile:
         reader = csv.reader(csvfile, delimiter=',')
-        for row in reader:
-            print(row)
-    with open('Distance.csv', newline='') as csvfile:
+        for index, row in enumerate(reader):
+            locations.append(Location(*row))
+    with open('data/Distance.csv', newline='') as csvfile:
         reader = csv.reader(csvfile, delimiter=',')
-        for row in reader:
-            print(row)
+        for index, row in enumerate(reader):
+            locations[index].set_distance(row)
 
     def main(self):
         print("Hello World")
 
     def print_hi(self, name):
-        # Use a breakpoint in the code line below to debug your script.
         print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
 
 
