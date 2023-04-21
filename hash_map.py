@@ -10,9 +10,13 @@ class HashMap:
             self.list.append([])
         print(self.list)
 
-    def insert(self, item):
-        key = hash(item) % self.size
-        self.list[key] = item
+    def insert(self, key, item):
+        print('Inserting', item)
+        print('key', key)
+        print('hash', hash(key))
+        print('bucket address', hash(key) % len(self.list))
+        bucket = hash(key) % len(self.list)
+        self.list[bucket] = item
 
     def get(self, key):
         return self.list[key]

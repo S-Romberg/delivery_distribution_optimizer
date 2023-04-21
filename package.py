@@ -1,7 +1,7 @@
 class Package:
-    def __init__(self, id, address, city, state, zip, deadline, weight, notes):
-        print('Creating Package', id, address, city, state, zip, deadline, weight, notes)
-        self.id = id
+    def __init__(self, id_, address, city, state, zip, deadline, weight, notes):
+        # print('Creating Package', id_, address, city, state, zip, deadline, weight, notes)
+        self.id_ = id_
         self.address = address
         self.city = city
         self.state = state
@@ -11,4 +11,4 @@ class Package:
         self.notes = notes
 
     def __str__(self):
-        return self.id, self.address, self.city, self.state, self.zip, self.deadline, self.weight, self.notes
+        return f'{self.id_}, {self.address}, {self.city}, {self.state}, {self.zip}, {self.deadline}, {self.weight}, {self.notes}'

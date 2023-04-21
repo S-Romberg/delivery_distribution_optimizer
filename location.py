@@ -1,7 +1,7 @@
 class Location:
-    def __init__(self, id, name, address):
-        print('Creating Location', id, name, address)
-        self.id = id
+    def __init__(self, id_, name, address):
+        # print('Creating Location', id_, name, address)
+        self.id_ = id_
         self.name = name
         self.address = address
         self.distances = None
@@ -10,4 +10,4 @@ class Location:
         self.distances = distance
 
     def __str__(self):
-        return self.id, self.name, self.address, self.distances
+        return f'{self.id_}, {self.name}, {self.address}, {self.distances}'
