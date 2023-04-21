@@ -1,19 +1,24 @@
 import csv
 from package import Package
 from location import Location
+from hash_map import HashMap
 
 class Main:
-    locations = []
-    packages = []
+    locations = HashMap()
+    packages = HashMap(40)
     with open('data/Packages.csv', newline='') as csvfile:
         reader = csv.reader(csvfile, delimiter=',')
         for index, row in enumerate(reader):
-            packages.append(Package(*row))
+            packages.insert(Package(*row))
     with open('data/Addresses and Hubs.csv', newline='') as csvfile:
         reader = csv.reader(csvfile, delimiter=',')
         for index, row in enumerate(reader):
-            locations.append(Location(*row))
+            locations.insert(Location(*row))
     with open('data/Distance.csv', newline='') as csvfile:
         reader = csv.reader(csvfile, delimiter=',')
-        for index, row in enumerate(reader):
-            locations[index].set_distance(row)
+        # for index, row in enumerate(reader):
+            # locations[index].set_distance(row)
+
+    # print(HashMap())
+    # print(locations)
+    # print(packages)
