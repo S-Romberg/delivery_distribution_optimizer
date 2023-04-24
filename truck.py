@@ -10,13 +10,35 @@ class Truck:
   def __str__(self):
     return f'{self.id_},'
 
-  def total_distance(self, locations):
-    for package in self.packages:
-      for x in range(locations.size):
-        id = x + 1
-        location = locations.get(id)
-        print(location.address, package.address)
+  def assign_packages(self, packages, recursive_call):
+    zip_code = 0
+    if self.packages and not recursive_call:
+      print('assigning start package')
+      zip_code = self.packages[0].zip_code
+    else:
+      for index in range(packages.size):
+        package_id = index + 1
+        package = packages.get(package_id)
+        if package.assigned_truck is None:
+          print('assigning start package')
+          self.add_package(package)
+          zip_code = package.zip_code
+          package.assigned_truck = self
+          break
 
+    print(zip_code)
+    if zip_code != 0:
+      for index in range(packages.size):
+        package_id = index + 1
+        package = packages.get(package_id)
+        if package.assigned_truck is None and zip_code == package.zip_code and len(self.packages) < 16:
+          print('adding package')
+          self.add_package(package)
+          package.assigned_truck = self
+          break
+
+      if len(self.packages) < 16:
+        self.assign_packages(packages, True)
 
   def add_package(self, package):
     self.packages.append(package)

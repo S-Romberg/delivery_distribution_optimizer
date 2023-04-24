@@ -44,9 +44,26 @@ class Main:
     elif package.assigned_truck is None:
       truck_1.add_package(package)
 
+
+  truck_1.assign_packages(packages, False)
+  truck_2.assign_packages(packages, False)
+  truck_3.assign_packages(packages, False)
   print(len(truck_1.packages))
   print(len(truck_2.packages))
   print(len(truck_3.packages))
-  print(truck_3.total_distance(locations))
-  def calculate_distance(self, first_address, second_address):
-    print(first_address, second_address)
+
+  def unassigned_packages(packages):
+    count = 0
+    assigned = 0
+    for index in range(packages.size):
+      package_id = index + 1
+      package = packages.get(package_id)
+      if package.assigned_truck is None:
+        count += 1
+      else:
+        assigned += 1
+    return count
+
+  print('unassigned', unassigned_packages(packages))
+
+

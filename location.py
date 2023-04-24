@@ -9,5 +9,8 @@ class Location:
   def set_distance(self, distance):
     self.distances = distance
 
+  def calculate_distance(self, second_address):
+    print(self, second_address)
+
   def __str__(self):
     return f'{self.id_}, {self.name}, {self.address}, {self.distances}'
