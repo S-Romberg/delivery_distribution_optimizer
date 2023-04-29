@@ -64,8 +64,8 @@ class Main:
 
   # Then we need to loop through the trucks and deliver the packages.
   # We need to count the miles between where we are and where the package is going and add that to the mileage counter
-  #     - In order to do count the miles we need to be able to compare the addresses to the locations data
-  #     - We need to do have the location ID for the current address and the destination address
+  #     - In order to count the miles we need to be able to compare the addresses to the locations data
+  #     - We need to have the location ID for the current address and the destination address
   #     - After we find the address in the location data we need to take that ID and use it to find the distance in the distance data, which is just a two dimensaional array so it should be [location id 1][location id 2]
   # then we need to divide the miles by 18 and add that time to the hour counter and save it as the delivery time for the package
 
