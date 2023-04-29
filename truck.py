@@ -8,7 +8,7 @@ class Truck:
     self.packages = []
 
   def __str__(self):
-    return f'{self.id_},'
+    return f'{self.id_}, {self.driver}, {self.packages}'
 
   def assign_packages(self, packages, recursive_call):
     zip_code = 0
