@@ -63,12 +63,53 @@ class Main:
   # driver 2 will drive truck 2
 
   # Then we need to loop through the trucks and deliver the packages.
-  # We need to count the miles between where we are and where the package is going and add that to the mileage counter
-  #     - In order to count the miles we need to be able to compare the addresses to the locations data
+  # We need to count the miles between where we are and where the package is going and add
+  # that to the mileage counter
+  #     - In order to count the miles we need to be able to compare the addresses to
+  #       the locations data
   #     - We need to have the location ID for the current address and the destination address
-  #     - After we find the address in the location data we need to take that ID and use it to find the distance in the distance data, which is just a two dimensaional array so it should be [location id 1][location id 2]
-  # then we need to divide the miles by 18 and add that time to the hour counter and save it as the delivery time for the package
+  #     - After we find the address in the location data we need to take that ID and use it
+  #       to find the distance in the distance data, which is just a two dimensaional array
+  #       so it should be [location id 1][location id 2]
+  # then we need to divide the miles by 18 and add that time to the hour counter
+  # and save it as the delivery time for the package
 
+  def find_location(address, locations):
+    for index in range(locations.size):
+      location = locations.get(index)
+      if '#104' in address:
+        print(location.address)
+      if address in location.address:
+        return location
+    return None
+
+  # How do we find the two locations in the location data?
+  # Once we have them we can use the ids, but we need to find them based off of the address.
+
+  mile_count = 0.0
+  def deliver_packages(truck, locations, find_location):
+    mile_count = 0.0
+    current_location = None
+    for package in truck.packages:
+      if current_location is None:
+        current_location = find_location(package.address, locations)
+      else:
+        next_location = find_location(package.address, locations)
+        if(next_location is None):
+          print('could not find location for', package.address)
+        mile_count += Truck.calculate_distance(current_location, next_location)
+    return mile_count
+      # truck.location = location_2
+      # package.delivery_time = truck.departure_time + timedelta(hours=mile_count / 18)
+
+  mile_count += deliver_packages(truck_1, locations, find_location)
+  print(mile_count)
+  mile_count += deliver_packages(truck_2, locations, find_location)
+  print(mile_count)
+  mile_count += deliver_packages(truck_3, locations, find_location)
+  print(mile_count)
+
+  @staticmethod
   def unassigned_packages(packages):
     count = 0
     assigned = 0
@@ -81,4 +122,4 @@ class Main:
         assigned += 1
     return count
 
-  print('unassigned', unassigned_packages(packages))
+#  print('unassigned', unassigned_packages(packages))
