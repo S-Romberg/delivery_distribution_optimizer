@@ -24,16 +24,29 @@ class Main:
         return location
     return None
 
+  # Next steps:
+  #   Mark packages as delivered after adding delivery miles
+  #   Only work with undelivered packages (this will require a decent amount of code at the beginning of the for loop)
+  #   Grab next two packages and deliver to the closer one
   def deliver_packages(self, truck):
     current_location = None
-    for package in truck.packages:
+    for i in range(0, len(truck.packages)):
+      package = truck.packages[i]
+      try:
+        next_package = truck.packages[i + 1]
+      except IndexError:
+        print('error')
       if current_location is None:
         current_location = self.find_location(package.address)
       else:
         next_location = self.find_location(package.address)
+        next_location_2 = self.find_location(next_package.address)
         if (next_location is None):
-          print('could not find location for', package.address)
+          print('could not find address', package.address)
         distance = Truck.calculate_distance(current_location, next_location)
+        distance_2 = Truck.calculate_distance(current_location, next_location_2)
+        if(distance_2 < distance):
+          print('smaller by: ', distance - distance_2)
         self.mile_count += distance
 
   def run(self):
