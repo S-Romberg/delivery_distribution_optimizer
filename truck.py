@@ -41,11 +41,13 @@ class Truck:
 
   @staticmethod
   def calculate_distance(location_1, location_2):
-    if location_1 is None or location_2 is None:
-      print(location_1, location_2)
-    if location_1.id_ > location_2.id_:
-      return float(location_1.distances[location_2.id_ - 1])
-    elif location_2.id_ > location_1.id_:
-      return float(location_2.distances[location_1.id_ - 1])
-    else:
+    try:
+      if location_1.id_ > location_2.id_:
+        return float(location_1.distances[location_2.id_ - 1])
+      elif location_2.id_ > location_1.id_:
+        return float(location_2.distances[location_1.id_ - 1])
+      else:
+        return 0.0
+    except Exception as e:
+      print(e)
       return 0.0
