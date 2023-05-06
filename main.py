@@ -12,10 +12,12 @@ class Main:
   def __init__(self):
     self.locations = HashMap(27)
     self.packages = HashMap(40)
+    self.starting_location = None
     self.truck_1 = Truck(1, timedelta(hours=8))
     self.truck_2 = Truck(2, timedelta(hours=9, minutes=5))
     self.truck_3 = Truck(3, timedelta(hours=10, minutes=20))
     self.mile_count = 0.0
+    self.time_saved = 0.0
 
   def find_location(self, address):
     for index in range(self.locations.size):
@@ -29,25 +31,8 @@ class Main:
   #   Only work with undelivered packages (this will require a decent amount of code at the beginning of the for loop)
   #   Grab next two packages and deliver to the closer one
   def deliver_packages(self, truck):
-    current_location = None
-    for i in range(0, len(truck.packages)):
-      package = truck.packages[i]
-      try:
-        next_package = truck.packages[i + 1]
-      except IndexError:
-        print('error')
-      if current_location is None:
-        current_location = self.find_location(package.address)
-      else:
-        next_location = self.find_location(package.address)
-        next_location_2 = self.find_location(next_package.address)
-        if (next_location is None):
-          print('could not find address', package.address)
-        distance = Truck.calculate_distance(current_location, next_location)
-        distance_2 = Truck.calculate_distance(current_location, next_location_2)
-        if(distance_2 < distance):
-          print('smaller by: ', distance - distance_2)
-        self.mile_count += distance
+    truck.deliver_packages()
+    self.mile_count += truck.miles
 
   def run(self):
 
@@ -60,6 +45,8 @@ class Main:
       for index, row in enumerate(reader):
         id_ = index + 1
         self.locations.insert(id_, Location(id_, *row))
+        if id_ == 1:
+          self.starting_location = self.locations.get(id_)
     with open('data/Distance.csv', newline='', encoding='utf-8-sig') as csvfile:
       reader = csv.reader(csvfile, delimiter=',')
       for index, row in enumerate(reader):
@@ -69,6 +56,7 @@ class Main:
     for index in range(self.packages.size):
       package_id = index + 1
       package = self.packages.get(package_id)
+      package.location = self.find_location(package.address)
       if package.notes is not None and package.assigned_truck is None:
         # All late packages will go on truck 2
         if package.notes == 'Delayed on flight---will not arrive to depot until 9:05 am' or package.notes == 'Can only be on truck 2':  # All early packages will go on one truck that will leave at 8am
@@ -86,6 +74,10 @@ class Main:
         elif package.deadline != 'EOD':
           self.truck_1.add_package(package)
           package.assigned_truck = self.truck_1
+
+    self.truck_1.current_location = self.starting_location
+    self.truck_2.current_location = self.starting_location
+    self.truck_3.current_location = self.starting_location
 
     self.truck_1.assign_packages(self.packages, False)
     self.truck_2.assign_packages(self.packages, False)

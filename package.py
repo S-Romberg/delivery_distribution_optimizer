@@ -11,9 +11,10 @@ class Package:
     self.notes = notes
     self.delivered_at = None
     self.assigned_truck = None
+    self.location = None
 
   def set_delivered_at(self, time):
     self.delivered_at = time
 
   def __str__(self):
-    return f'{self.id_}, {self.address}, {self.city}, {self.state}, {self.zip_code}, {self.deadline}, {self.weight}, {self.notes}'
+    return f'delivered_at: {self.delivered_at}. {self.id_}, {self.address}, {self.city}, {self.state}, {self.zip_code}, {self.deadline}, {self.weight}, {self.notes}'
