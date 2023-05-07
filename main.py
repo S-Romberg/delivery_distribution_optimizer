@@ -12,6 +12,7 @@ class Main:
   def __init__(self):
     self.locations = HashMap(27)
     self.packages = HashMap(40)
+    self.sorted_packages = []
     self.starting_location = None
     self.truck_1 = Truck(1, timedelta(hours=8))
     self.truck_2 = Truck(2, timedelta(hours=9, minutes=5))
@@ -22,24 +23,20 @@ class Main:
   def find_location(self, address):
     for index in range(self.locations.size):
       location = self.locations.get(index)
-      if address in location.address:
+      if address in location.name or address in location.address:
         return location
     return None
 
-  # Next steps:
-  #   Mark packages as delivered after adding delivery miles
-  #   Only work with undelivered packages (this will require a decent amount of code at the beginning of the for loop)
-  #   Grab next two packages and deliver to the closer one
   def deliver_packages(self, truck):
     truck.deliver_packages()
     self.mile_count += truck.miles
 
   def run(self):
-
+    # Read all CSV files and populate data structures
     with open('data/Packages.csv', newline='', encoding='utf-8-sig') as csvfile:
       reader = csv.reader(csvfile, delimiter=',')
       for index, row in enumerate(reader):
-        self.packages.insert(int(row[0]), Package(*row))
+        self.sorted_packages.append(row)
     with open('data/Addresses and Hubs.csv', newline='', encoding='utf-8-sig') as csvfile:
       reader = csv.reader(csvfile, delimiter=',')
       for index, row in enumerate(reader):
@@ -51,6 +48,11 @@ class Main:
       reader = csv.reader(csvfile, delimiter=',')
       for index, row in enumerate(reader):
         self.locations.get(index + 1).set_distance(row)
+
+    # Sort packages by address
+    self.sorted_packages = sorted(self.sorted_packages, key=lambda x: x[4])
+    for package in self.sorted_packages:
+      self.packages.insert(int(package[0]), Package(*package))
 
     # Loop through all packages, finding each by id and adding it to a truck
     for index in range(self.packages.size):
@@ -75,41 +77,21 @@ class Main:
           self.truck_1.add_package(package)
           package.assigned_truck = self.truck_1
 
+    # Set starting location for trucks and assign the rest of the packages
     self.truck_1.current_location = self.starting_location
     self.truck_2.current_location = self.starting_location
     self.truck_3.current_location = self.starting_location
+    self.truck_3.assign_packages(self.packages)
+    self.truck_2.assign_packages(self.packages)
+    self.truck_1.assign_packages(self.packages)
 
-    self.truck_1.assign_packages(self.packages, False)
-    self.truck_2.assign_packages(self.packages, False)
-    self.truck_3.assign_packages(self.packages, False)
-
-    # next we need to assign drivers to the trucks, there are only 2 drivers
-    # driver 1 will drive truck 1 and 3, in that order
-    # driver 2 will drive truck 2
-
-    # Then we need to loop through the trucks and deliver the packages.
-    # We need to count the miles between where we are and where the package is going and add
-    # that to the mileage counter
-    #     - In order to count the miles we need to be able to compare the addresses to
-    #       the locations data
-    #     - We need to have the location ID for the current address and the destination address
-    #     - After we find the address in the location data we need to take that ID and use it
-    #       to find the distance in the distance data, which is just a two dimensaional array
-    #       so it should be [location id 1][location id 2]
-    # then we need to divide the miles by 18 and add that time to the hour counter
-    # and save it as the delivery time for the package
-
-
-    # How do we find the two locations in the location data?
-    # Once we have them we can use the ids, but we need to find them based off of the address.
-
-      # truck.location = location_2
-      # package.delivery_time = truck.departure_time + timedelta(hours=mile_count / 18)
-
+    print('TRUCK 1')
     self.deliver_packages(self.truck_1)
     print(self.mile_count)
+    print('TRUCK 2')
     self.deliver_packages(self.truck_2)
     print(self.mile_count)
+    print('TRUCK 3')
     self.deliver_packages(self.truck_3)
     print(self.mile_count)
 

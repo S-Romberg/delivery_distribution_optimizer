@@ -12,6 +12,7 @@ class Package:
     self.delivered_at = None
     self.assigned_truck = None
     self.location = None
+    self.status = 'At Hub'
 
   def set_delivered_at(self, time):
     self.delivered_at = time
