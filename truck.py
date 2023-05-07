@@ -46,9 +46,8 @@ class Truck:
     distance_3 = 1000
 
     if len(packages) == 1:
-      self.packages.remove(package)
-      self.delivered_packages.append(package)
-      return round(Truck.calculate_distance(self.current_location, package.location), 2)
+      distance =  round(Truck.calculate_distance(self.current_location, package.location), 2)
+      return self.deliver_package(package, distance)
     if len(packages) > 2:
       package_2 = packages[2]
       distance_3 = Truck.calculate_distance(self.current_location, package_2.location)
@@ -60,38 +59,23 @@ class Truck:
     if distance_2 < distance and distance_2 < distance_3:
       if package_1 in self.delivered_packages:
         return
-
-      self.current_time = self.current_time + timedelta(hours=(round(distance_2, 2) / self.speed))
-      package.delivered_at = self.current_time
-      self.current_location = package_1.location
-      self.packages.remove(package_1)
-      self.delivered_packages.append(package_1)
-      return round(distance_2, 2)
+      return self.deliver_package(package_1, distance_2)
     elif distance_3 < distance and distance_3 < distance_2:
       if package_2 in self.delivered_packages:
         return
-      self.current_time = self.current_time + timedelta(hours=(round(distance_3, 2) / self.speed))
-      print(self.current_time)
-      package.delivered_at = self.current_time
-      self.current_location = package_2.location
-      self.packages.remove(package_2)
-      self.delivered_packages.append(package_2)
-      # print('zip: ', package_2.zip_code)
-      return round(distance_3, 2)
+      return self.deliver_package(package_2, distance_3)
     else:
-      if package in self.delivered_packages:
-        return
-      self.current_time = self.current_time + timedelta(hours=(round(distance, 2) / self.speed))
-      package.delivered_at = self.current_time
-      self.current_location = package.location
-      self.packages.remove(package)
-      self.delivered_packages.append(package)
-      # print('zip: ', package.zip_code)
-      return round(distance, 2)
+      return self.deliver_package(package, distance)
+
+  def deliver_package(self, package, distance):
+    self.current_time = self.current_time + timedelta(hours=(round(distance, 2) / self.speed))
+    package.delivered_at = self.current_time
+    self.current_location = package.location
+    self.packages.remove(package)
+    self.delivered_packages.append(package)
+    return round(distance, 2)
 
   def deliver_packages(self):
     for i in range(len(self.packages)):
       distance = self.deliver_closest_package(self.packages)
       self.miles += distance
-
-

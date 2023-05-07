@@ -1,5 +1,4 @@
 import csv
-from datetime import datetime
 from datetime import timedelta
 
 from package import Package
@@ -85,31 +84,35 @@ class Main:
     self.truck_2.assign_packages(self.packages)
     self.truck_1.assign_packages(self.packages)
 
-    print('TRUCK 1')
+    # Deliver all packages
     self.deliver_packages(self.truck_1)
-    print(self.mile_count)
-    print('TRUCK 2')
     self.deliver_packages(self.truck_2)
-    print(self.mile_count)
-    print('TRUCK 3')
     self.deliver_packages(self.truck_3)
-    print(self.mile_count)
+    print('TOTAL MILEAGE: ', self.mile_count)
 
-    @staticmethod
-    def unassigned_packages(packages):
-      count = 0
-      assigned = 0
-      for index in range(packages.size):
-        package_id = index + 1
-        package = packages.get(package_id)
-        if package.assigned_truck is None:
-          count += 1
-        else:
-          assigned += 1
-      return count
 
-#  print('unassigned', unassigned_packages(packages))
+  def print_packages_by_time(self):
+    start_input = input('Enter a start time in HH:MM format: ')
+    end_input = input('Enter an end time in HH:MM format: ')
+    try:
+      start_hour, start_minute = start_input.split(':')
+      end_hour, end_minute = end_input.split(':')
+      start_time = timedelta(hours=int(start_hour), minutes=int(start_minute))
+      end_time = timedelta(hours=int(end_hour), minutes=int(end_minute))
+    except ValueError:
+      print('Invalid input. Please try again.')
+      return
+
+    print('Packages with status'.center(40, '-'))
+    for i in range(self.packages.size):
+      package = self.packages.get(i + 1)
+      print(f'Package status during {start_time}-{end_time}: {package.status_by_time(start_time, end_time)}')
+      print(package)
+      print()
+
+
 
 if __name__ == "__main__":
   main = Main()
   main.run()
+  main.print_packages_by_time()
