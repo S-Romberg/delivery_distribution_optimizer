@@ -1,6 +1,5 @@
 class Package:
   def __init__(self, id_, address, city, state, zip_code, deadline, weight, notes):
-    # print('Creating Package', id_, address, city, state, zip_code, deadline, weight, notes)
     self.id_ = id_
     self.address = address
     self.city = city
@@ -13,6 +12,7 @@ class Package:
     self.assigned_truck = None
     self.location = None
 
+  # Returns the status of the package
   def status(self):
     if self.delivered_at is None and self.assigned_truck.depart_time < self.assigned_truck.current_time:
       return 'En route'
@@ -21,6 +21,7 @@ class Package:
     else:
       return 'At the hub'
 
+  # Takes in two times and returns the status of the package during that time
   def status_by_time(self, start_time, end_time):
     if self.delivered_at <= end_time:
       return 'Delivered'
@@ -32,4 +33,3 @@ class Package:
 
   def __str__(self):
     return f'id: {self.id_}, address: {self.address}, city: {self.city}, state: {self.state}, zip code: {self.zip_code}, deadline: {self.deadline}, weight: {self.weight}, notes: {self.notes}, delivered_at: {self.delivered_at}'
-    # return f' delivered_at: {self.delivered_at}'
