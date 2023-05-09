@@ -1,7 +1,6 @@
 from datetime import timedelta
 class Truck:
   def __init__(self, id_, depart_time):
-    # print('Creating Package', id_, address, city, state, zip, deadline, weight, notes)
     self.id_ = id_
     self.depart_time = depart_time
     self.speed = 18
@@ -16,7 +15,7 @@ class Truck:
   def __str__(self):
     return f'{self.id_}, {self.driver}, {self.packages}'
 
-  # Assign packages based on matching zip codes
+  # Assign packages if the package is not yet assigned to a truck
   def assign_packages(self, packages):
     for index in range(packages.size):
       if len(self.packages) < 16:
@@ -28,6 +27,7 @@ class Truck:
   def add_package(self, package):
     self.packages.append(package)
 
+  # Takes in two locations and calculates the distance between them
   @staticmethod
   def calculate_distance(location_1, location_2):
     try:
@@ -41,6 +41,7 @@ class Truck:
       print(e)
       return 0.0
 
+  # Takes in a list of packages and delivers the closest package, returns the distance
   def deliver_closest_package(self, packages):
     package = packages[0]
     distance_3 = 1000
@@ -67,6 +68,7 @@ class Truck:
     else:
       return self.deliver_package(package, distance)
 
+  # Updates all data to show that the packages has been delivered
   def deliver_package(self, package, distance):
     self.current_time = self.current_time + timedelta(hours=(round(distance, 2) / self.speed))
     package.delivered_at = self.current_time
@@ -75,6 +77,7 @@ class Truck:
     self.delivered_packages.append(package)
     return round(distance, 2)
 
+  # Iterates through the list of packages and delivers them
   def deliver_packages(self):
     for i in range(len(self.packages)):
       distance = self.deliver_closest_package(self.packages)

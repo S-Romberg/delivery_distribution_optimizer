@@ -7,6 +7,8 @@ from hash_map import HashMap
 from truck import Truck
 
 
+# Spencer Romberg
+# ID #001406098
 class Main:
   def __init__(self):
     self.locations = HashMap(27)
@@ -19,6 +21,7 @@ class Main:
     self.mile_count = 0.0
     self.time_saved = 0.0
 
+  # Takes in an address and returns the location object
   def find_location(self, address):
     for index in range(self.locations.size):
       location = self.locations.get(index)
@@ -26,6 +29,7 @@ class Main:
         return location
     return None
 
+  # Takes in a truck, delivers packages, and updates the mile count
   def deliver_packages(self, truck):
     truck.deliver_packages()
     self.mile_count += truck.miles
@@ -48,7 +52,7 @@ class Main:
       for index, row in enumerate(reader):
         self.locations.get(index + 1).set_distance(row)
 
-    # Sort packages by address
+    # Sort packages by zip code and then input them into the hash table
     self.sorted_packages = sorted(self.sorted_packages, key=lambda x: x[4])
     for package in self.sorted_packages:
       self.packages.insert(int(package[0]), Package(*package))
@@ -90,7 +94,6 @@ class Main:
     self.deliver_packages(self.truck_3)
     print('TOTAL MILEAGE: ', self.mile_count)
 
-
   def print_packages_by_time(self):
     start_input = input('Enter a start time in HH:MM format: ')
     end_input = input('Enter an end time in HH:MM format: ')
@@ -109,8 +112,6 @@ class Main:
       print(f'Package status during {start_time}-{end_time}: {package.status_by_time(start_time, end_time)}')
       print(package)
       print()
-
-
 
 if __name__ == "__main__":
   main = Main()
